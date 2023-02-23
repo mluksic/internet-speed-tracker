@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  golang:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: mluksic/internet-speed-tracker:latest
+    container_name: golang
+    restart: always
+    ports:
+      - '9000:9000'
+
+  prometheus:
+    image: prom/prometheus:v2.42.0
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9090:9090
+    restart: always
+  
+  grafana:
+    image: grafana/grafana:9.3.6
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  prometheus_data:
+  grafana-storage:
