@@ -34,8 +34,8 @@ func recordInternetSpeed() {
 		return
 	}
 	fmt.Println(internetSpeed.Timestamp, internetSpeed.Download, internetSpeed.Upload, internetSpeed.Ping)
-	downloadGauge.Set(internetSpeed.Download)
-	uploadGauge.Set(internetSpeed.Upload)
+	downloadGauge.Set(internetSpeed.Download / 1000000)
+	uploadGauge.Set(internetSpeed.Upload / 1000000)
 	pingGauge.Set(internetSpeed.Ping)
 }
 
@@ -44,18 +44,18 @@ var (
 		prometheus.GaugeOpts{
 			Namespace: "speedtest",
 			Name:      "download",
-			Help:      "Download speed gauge, measured in MB/s.",
+			Help:      "Download speed gauge, measured in Mb/s.",
 		})
 	uploadGauge = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "speedtest",
 			Name:      "upload",
-			Help:      "Upload speed gauge, measured in MB/s.",
+			Help:      "Upload speed gauge, measured in Mb/s.",
 		})
 	pingGauge = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: "speedtest",
-			Name:      "latency",
+			Name:      "ping",
 			Help:      "Ping gauge, measured in ms.",
 		})
 	internetSpeed InternetSpeed
