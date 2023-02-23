@@ -4,8 +4,8 @@ on:
         branches:
             - master
 jobs:
-    build-and-push:
-        runs-on: ubuntu-latest
+    build-push-deploy:
+        runs-on: self-hosted
         steps:
             - uses: actions/checkout@v2
             - name: Install QEMU and Docker Buildx
@@ -20,10 +20,6 @@ jobs:
             - name: Build and push Docker images
               run: |
                   docker buildx build --platform linux/arm/v7 -t mluksic/internet-speed-tracker --push .
-    deploy-to-pi:
-        runs-on: self-hosted
-        steps:
-            - uses: actions/checkout@v2
             - name: Deploy with Docker Compose
               run: |
                   cd /home/pi/actions-runner/_work/internet-speed-tracker/internet-speed-tracker
